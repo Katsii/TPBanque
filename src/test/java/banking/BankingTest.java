@@ -69,4 +69,59 @@ public class BankingTest {
 		ds.setPassword("sa");
 		return ds;
 	}	
+        
+        @Test
+        public void erreurMontant()throws Exception {
+            float amount = 200;
+            int fromCustomer = 0;
+            int toCustomer = 1;
+            float before0 = myDAO.balanceForCustomer(fromCustomer);
+	    float before1 = myDAO.balanceForCustomer(toCustomer);
+	    try{
+                myDAO.bankTransferTransaction(fromCustomer, toCustomer, amount);
+		// Les balances doivent avoir été mises à jour dans les 2 comptes
+		
+            }catch(Exception e){ 
+                assertEquals("Balance incorrecte !", before0 , myDAO.balanceForCustomer(fromCustomer), 0.001f);
+		assertEquals("Balance incorrecte !", before1 , myDAO.balanceForCustomer(toCustomer), 0.001f);	
+            }
+        }
+        
+        @Test
+        public void erreurDebiteur()throws Exception {
+            float amount = 10;
+            int fromCustomer = 5;
+            int toCustomer = 1;
+            float before0 = myDAO.balanceForCustomer(fromCustomer);
+	        float before1 = myDAO.balanceForCustomer(toCustomer);
+            try{
+                
+	    
+                myDAO.bankTransferTransaction(fromCustomer, toCustomer, amount);
+		// Les balances doivent avoir été mises à jour dans les 2 comptes
+		
+            }catch(Exception e){
+                assertEquals("Balance incorrecte !", before0 , myDAO.balanceForCustomer(fromCustomer), 0.001f);
+		assertEquals("Balance incorrecte !", before1 , myDAO.balanceForCustomer(toCustomer), 0.001f);	
+            }
+        }
+        
+        @Test
+        public void erreurCrediteur()throws Exception {
+            float amount = 10;
+            int fromCustomer = 0;
+            int toCustomer = 5;
+            float before0 = myDAO.balanceForCustomer(fromCustomer);
+	       float before1 = myDAO.balanceForCustomer(toCustomer);
+            try{
+               
+	     
+                myDAO.bankTransferTransaction(fromCustomer, toCustomer, amount);
+			
+            }catch(Exception e){       
+                // Les balances doivent avoir été mises à jour dans les 2 comptes
+		assertEquals("Balance incorrecte !", before0 , myDAO.balanceForCustomer(fromCustomer), 0.001f);
+		assertEquals("Balance incorrecte !", before1 , myDAO.balanceForCustomer(toCustomer), 0.001f);
+            }
+        }
 }
